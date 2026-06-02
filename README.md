@@ -66,7 +66,17 @@ Binary features were used because the trajectory analysis should focus on what a
 
 The final embedding combines binary L1 and L2 session features.
 
-UMAP was used to project sessions into two dimensions using cosine distance.
+Before choosing the final representation, I compared aggregated and binary session features.
+
+![Aggregated session representation](assets/agg-sr.png)
+
+The aggregated representation keeps frequency, but repeated page visits can stretch the geometry.
+
+![Binary session representation](assets/bin-sr.png)
+
+The binary representation gives a cleaner view of which catalog areas appeared in the session.
+
+UMAP was then used to project the combined binary L1/L2 features into two dimensions using cosine distance.
 
 ![Binary L1/L2 session space](assets/l1_l2_binary.png)
 
@@ -172,6 +182,8 @@ Users are split into three relative groups using the 33rd and 66th percentiles o
 
 These are exploratory trajectory groups. They should not be interpreted as final personas because most users have only four usable sessions.
 
+![Distribution of trajectory scores](assets/trajectory_score_dist.png)
+
 ---
 
 ## Slide 12 — What The Groups Mean
@@ -184,7 +196,13 @@ Support features help validate the grouping:
 - higher `mean_step_distance` means each session-to-session change is larger
 - higher `cluster_entropy` means the user visits a broader mix of session states
 
-The groups therefore describe different levels of behavioral mobility.
+The groups therefore describe different levels of behavioral mobility. The plots below use MinMax-scaled support features so they can be compared with `trajectory_score` on the same 0-1 scale.
+
+![Trajectory score vs cluster entropy](assets/trajectory_score_vs_cluster_entropy.png)
+
+![Trajectory score vs path length](assets/trajectory_score_vs_path_length.png)
+
+![Trajectory score vs mean step distance](assets/trajectory_score_vs_mean_step_distance.png)
 
 ---
 
@@ -203,7 +221,5 @@ The groups therefore describe different levels of behavioral mobility.
 The main limitation is repeated user coverage.
 
 Most users do not have enough clustered sessions to support robust trajectory modeling. This makes user-level clustering sensitive to filtering choices and small-sample effects.
-
-The session clusters are stronger than the user trajectory groups because there are many more sessions than repeat-session users.
 
 ---
